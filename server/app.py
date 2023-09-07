@@ -20,7 +20,7 @@ class Plants(Resource):
 
     def get(self):
 
-        response_dict_list = [plant.to_dict() for plant in Plants.query.all()]
+        response_dict_list = [plant.to_dict() for plant in Plant.query.all()]
 
         response = make_response(response_dict_list,200)
 
@@ -28,12 +28,12 @@ class Plants(Resource):
     
     def post(self):
 
-        plant = request.get_json()
-
-        new_plant = Plants(
-            name = plant["name"],
-            image = plant["image"],
-            price = plant["price"]
+        get_plant = request.get_json()
+        print ("this is plant===============", get_plant)
+        new_plant = Plant(
+            name = get_plant["name"],
+            image = get_plant["image"],
+            price = get_plant["price"]
         )
         
         db.session.add(new_plant)
@@ -51,13 +51,13 @@ class PlantByID(Resource):
     
     def get(self,id):
 
-        response_dict = Plants.query.filter_by(id=id).first().to_dict()
+        response_dict = Plant.query.filter_by(id=id).first().to_dict()
 
         response = make_response(response_dict,200)
 
         return response
         
-api.add_resource(Plants, '/plants/<init:id>')
+api.add_resource(PlantByID, '/plants/<int:id>')
 
 
 if __name__ == '__main__':
